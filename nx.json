@@ -22,5 +22,5 @@
     "sharedGlobals": []
   },
   "plugins": ["@nxtensions/astro"],
-  "defaultProject": ""
+  "defaultProject": "blog"
 }
