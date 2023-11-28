@@ -1,34 +1,57 @@
 {
-  "name": "blog",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "blog",
   "projectType": "application",
   "sourceRoot": "apps/blog/src",
+  "tags": [
+    "astro:blog"
+  ],
   "targets": {
     "build": {
-      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
-      "executor": "@nxtensions/astro:build",
-      "options": {}
-    },
-    "dev": {
-      "executor": "@nxtensions/astro:dev",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "pnpm exec astro --root apps/blog build",
+          "pnpm dlx pagefind --site apps/blog/dist --root-selector body",
+          "cp -r apps/blog/dist/pagefind apps/blog/public"
+        ]
+      }
     },
     "preview": {
+      "executor": "nx:run-commands",
       "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        }
+        "build"
       ],
-      "executor": "@nxtensions/astro:preview",
-      "options": {}
+      "options": {
+        "commands": [
+          "pnpm exec astro --root apps/blog preview"
+        ]
+      }
     },
-    "check": {
-      "executor": "@nxtensions/astro:check"
+    "add": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/blog add"
+      }
     },
-    "sync": {
-      "executor": "@nxtensions/astro:sync"
+    "info": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/blog info"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/blog check"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/blog dev"
+      }
     }
-  },
-  "tags": ["astro:blog"]
+  }
 }
