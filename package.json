@@ -7,10 +7,10 @@
   },
   "private": true,
   "dependencies": {
-    "@astrojs/markdoc": "^0.7.2",
     "@nxtensions/astro": "16.2.0"
   },
   "devDependencies": {
+    "@astrojs/markdoc": "^0.7.2",
     "@nx/js": "17.1.3",
     "@nx/workspace": "17.1.3",
     "astro": "^3.6.3",
