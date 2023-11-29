@@ -11,11 +11,7 @@
       "executor": "nx:run-commands",
       "options": {
         "parallel": false,
-        "commands": [
-          "pnpm exec astro --root apps/blog build",
-          "pnpm dlx pagefind --site apps/blog/dist --root-selector body",
-          "cp -r apps/blog/dist/pagefind apps/blog/public"
-        ]
+        "command": "pnpm exec astro --root apps/blog build"
       }
     },
     "preview": {
