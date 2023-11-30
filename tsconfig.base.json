@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@personal-projects/astro-generators": [
+        "libs/generators/astro/src/index.ts"
+      ],
+      "@personal-projects/internal": ["libs/internal/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

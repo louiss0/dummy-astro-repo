@@ -1,0 +1,72 @@
+---
+import '@fontsource/lato/100.css';
+import '@fontsource/lato/300.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '@fontsource/lato/900.css';
+import '@fontsource/raleway';
+import BaseHead from '../components/BaseHead.astro';
+import { SITE_TITLE } from '../constants';
+import { z } from 'astro/zod';
+import type { TitleAndDescription } from '@personal-projects/internal';
+import { ViewTransitions } from 'astro:transitions';
+
+export type Props = TitleAndDescription;
+
+const { title, description } = Astro.props;
+
+const pageTitle = z
+  .string()
+  .refine(
+    (string) => !string.includes(SITE_TITLE),
+    (title) => ({
+      message: `The title that is inserted must not have ${SITE_TITLE} in it. 
+          Please change this ${title}`,
+    }),
+  )
+  .transform((string) => `${SITE_TITLE} | ${string}`)
+  .parse(title);
+---
+
+<style is:global>
+  :root {
+    --step--2: clamp(0.69rem, calc(0.58rem + 0.48vw), 0.96rem);
+    --step--1: clamp(0.78rem, calc(0.6rem + 0.75vw), 1.2rem);
+    --step-0: clamp(0.88rem, calc(0.62rem + 1.1vw), 1.5rem);
+    --step-1: clamp(0.98rem, calc(0.62rem + 1.57vw), 1.88rem);
+    --step-2: clamp(1.11rem, calc(0.6rem + 2.19vw), 2.34rem);
+    --step-3: clamp(1.25rem, calc(0.55rem + 2.98vw), 2.93rem);
+    --step-4: clamp(1.4rem, calc(0.47rem + 4vw), 3.66rem);
+    --step-5: clamp(1.58rem, calc(0.33rem + 5.3vw), 4.58rem);
+
+    --heading-font: 'Raleway', sans-serif;
+    --body-font: 'Lato', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-size: var(--step-0);
+
+    font-family: var(--body-font);
+  }
+</style>
+
+<html lang="en">
+  <head>
+    <BaseHead title={pageTitle} {description} />
+    <ViewTransitions />
+    <slot name="head" />
+  </head>
+  <body
+    class:list={[
+      'text-gray-900 bg-gray-50 selection:all:(bg-blue-600 text-gray-50)',
+      'dark:(bg-gray-900 text-gray-50 selection:all:(text-blue-600 bg-gray-50))',
+      'min-h-screen grid grid-rows-[auto_1fr_auto]',
+    ]}
+  >
+    <slot />
+  </body>
+</html>

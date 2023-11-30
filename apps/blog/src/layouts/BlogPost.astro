@@ -1,0 +1,84 @@
+---
+import {
+  Container,
+  Heading,
+  LocaleTime,
+  TwilightFlipSwitch,
+} from '@personal-projects/internal';
+import Copyright from '../components/Copyright.astro';
+import Default from './Default.astro';
+import { useTemplaterAndProjector } from '@forastro/utilities';
+import { Image } from 'astro:assets';
+import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension } from '../utils';
+import BaseButton from '../components/BaseButton.vue';
+
+interface Props {
+  title: string;
+  collection: string;
+  slug: string;
+  description: string;
+  pubDate?: string;
+  updateDate?: string;
+  heroImage?: ImageMetadata;
+}
+
+const { slug, collection, title, description, pubDate, updateDate, heroImage } =
+  Astro.props;
+
+const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
+---
+
+<Default {...{ title, description }}>
+  <header class="px-12 py-6 grid gap-4">
+    <nav class="py-4 px-12">
+      <Container maxWidthClass="max-w-screen-lg">
+        <div class="flex justify-between items-center">
+          <TwilightFlipSwitch client:idle />
+          <BaseButton href="/">Go Home</BaseButton>
+        </div>
+      </Container>
+    </nav>
+    <Container widthClass="w-3/5">
+      <div class="py-6 px-3 grid gap-9">
+        {
+          heroImage && (
+            <div class="flex ring-2 ring-current brightness-90 dark:brightness-120">
+              <Image
+                src={heroImage}
+                class="object-cover w-full"
+                alt={attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension(
+                  heroImage.src,
+                )}
+              />
+            </div>
+          )
+        }
+
+        <Heading level={1}>{title}</Heading>
+
+        {pubDate ? <LocaleTime dateString={pubDate} /> : null}
+
+        {updateDate ? <UpdatedDateProjector /> : null}
+      </div>
+    </Container>
+  </header>
+
+  <article
+    data-pagefind-body
+    transition:name={`${collection}-${slug}`}
+    transition:animate="initial"
+    class="px-12 py-6 mx-auto prose prose-slate dark:prose-invert"
+  >
+    <slot />
+  </article>
+
+  <footer class="px-12 py-6">
+    <Copyright />
+  </footer>
+</Default>
+
+<UpdatedDateTemplater>
+  <div>
+    Last updated on <time>{updateDate}</time>
+  </div>
+</UpdatedDateTemplater>

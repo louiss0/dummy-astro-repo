@@ -1,0 +1,15 @@
+---
+type Props = {
+  id: string;
+  class: string;
+};
+
+const { id } = Astro.props;
+---
+
+<dl
+  {id}
+  class="grid grid-cols-[min-content_auto] [&_dd]:p-2 [&_dt]:(p-2 font-semibold after:content-[':'])"
+>
+  <slot />
+</dl>

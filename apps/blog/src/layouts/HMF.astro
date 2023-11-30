@@ -1,0 +1,31 @@
+---
+
+import Default, { type Props as DefaultProps } from './Default.astro';
+
+type Props = DefaultProps;
+
+const { slots } = Astro;
+
+const header = slots.has('header')
+  ? `${await slots.render('header')} `
+  : ` <p class="text-red-600" >You must have a header if you want to use this layout</p>`;
+
+const footer = slots.has('footer')
+  ? `${await slots.render('footer')}`
+  : ` <p class="text-red-600" >You must have a footer if you want to use this layout</p>`;
+
+const { title, description } = Astro.props;
+---
+
+<Default {...{ title, description }}>
+  <slot name="head" slot="head" />
+  <header class="px-4 py-2">
+    <Fragment set:html={header} />
+  </header>
+  <main class="px-4 py-2">
+    <slot />
+  </main>
+  <footer class="px-4 py-2">
+    <Fragment set:html={footer} />
+  </footer>
+</Default>

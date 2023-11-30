@@ -1,0 +1,40 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+import { getAllCollections } from '../../utils';
+import type { InferGetStaticParamsType } from 'node_modules/astro/dist/@types/astro';
+
+export const getStaticPaths = async () =>
+  (
+    await getAllCollections(
+      import.meta.env.PROD ? (entry) => !entry.data.draft : undefined,
+    )
+  ).map((entry) => ({
+    params: { collection: entry.collection, slug: entry.slug },
+    props: entry,
+  }));
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+const { data, render } = Astro.props;
+const { collection, slug } = Astro.params;
+
+const { title, description, heroImage, pubDate, updateDate } = data;
+
+const { Content } = await render();
+---
+
+<BlogPost
+  {collection}
+  {slug}
+  {title}
+  {description}
+  {heroImage}
+  {pubDate}
+  {updateDate}
+>
+  <Content {...data} />
+</BlogPost>

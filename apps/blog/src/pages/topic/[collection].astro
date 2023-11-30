@@ -1,0 +1,198 @@
+---
+import type { InferGetStaticPropsType, InferGetStaticParamsType } from 'astro';
+import { COLLECTION_NAMES, type Category } from '../../collections';
+import {
+  getCollection,
+  type CollectionEntry,
+  type CollectionKey,
+} from 'astro:content';
+import Default from '../../layouts/Default.astro';
+import {
+  Center,
+  Container,
+  Heading,
+  Section,
+  TwilightFlipSwitch,
+} from '@personal-projects/internal';
+import Icon from 'astro-icon';
+import {
+  executeIfElse,
+  iterate,
+  useTemplaterAndProjector,
+} from '@forastro/utilities';
+import BaseButton from '../../components/BaseButton.vue';
+
+type CategoryCollectionType = `${Category}Collection`;
+
+type EntryDataList = Array<
+  CollectionEntry<CollectionKey>['data'] & {
+    slug: CollectionEntry<CollectionKey>['slug'];
+  }
+>;
+
+export const getStaticPaths = async () => {
+  const collectionMap = COLLECTION_NAMES.reduce(
+    (carry, collectionName) =>
+      carry.set(
+        collectionName,
+        getCollection(
+          collectionName,
+          import.meta.env.PROD ? (entry) => !entry.data.draft : undefined,
+        ),
+      ),
+    new Map<
+      (typeof COLLECTION_NAMES)[number],
+      ReturnType<typeof getCollection>
+    >(),
+  );
+
+  return await Promise.all(
+    Array.from(collectionMap).map(async ([key, value]) => {
+      const categoryToCollectionMap = (await value)
+        .map((entry) => ({
+          slug: entry.slug,
+          ...entry.data,
+        }))
+        .reduce(
+          (carry, value) => {
+            if (!carry.has(`${value.category}Collection`)) {
+              return carry.set(`${value.category}Collection`, [value]);
+            }
+
+            carry.get(`${value.category}Collection`)?.push(value);
+
+            return carry;
+          },
+
+          new Map<CategoryCollectionType, EntryDataList | undefined>(),
+        );
+
+      return {
+        params: {
+          collection: key,
+        },
+        props: Object.fromEntries(categoryToCollectionMap) as Record<
+          `${Category}Collection`,
+          EntryDataList | undefined
+        >,
+      };
+    }),
+  );
+};
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+const { StandaloneCollection, SegmentCollection, TutorialCollection } =
+  Astro.props as Props;
+
+const { collection } = Astro.params as Params;
+
+const topic = `${collection[0].toUpperCase()}${collection.slice(1)}`;
+
+type PostLinkProps = Record<'title' | 'slug', string>;
+
+const [PostLinkTemplater, PostLinkProjector] =
+  useTemplaterAndProjector<PostLinkProps>();
+
+type TopicSectionProps = {
+  title: string;
+  collection: EntryDataList | undefined;
+};
+
+const [TopicSectionTemplater, TopicSectionProjector] =
+  useTemplaterAndProjector<TopicSectionProps>();
+---
+
+<Default
+  title={topic}
+  description={`This is all the posts related to this topic ${topic} `}
+>
+  <nav class="px-12 py-4">
+    <div data-content class="flex justify-between items-center">
+      <TwilightFlipSwitch client:idle />
+      <BaseButton href="/">Go Home</BaseButton>
+    </div>
+  </nav>
+  <header class="py-6 px-10 sm:(py-8 px-12)">
+    <Center gapClass="gap-8">
+      <Heading level={1}>{topic}</Heading>
+
+      <p
+        class="leading-loose text-xl sm:(text-2xl leading-relaxed) max-w-[70ch]"
+      >
+        This is all of the posts that I have for Topic. <br />
+         I have decided to organize them into three kinds Tutorials, Posts and
+        Series. <br />
+         A Segment is a set of posts that revolve around a concept. <br />
+         A Tutorial is a post that teaches someone how to do something. <br />
+         A post is just a post about some thing it could just be a story about
+        what I did.
+      </p>
+    </Center>
+  </header>
+
+  <main>
+    <TopicSectionProjector title={'posts'} collection={StandaloneCollection} />
+    <TopicSectionProjector title={'Tutorial'} collection={TutorialCollection} />
+    <TopicSectionProjector title={'series'} collection={SegmentCollection} />
+  </main>
+</Default>
+
+<PostLinkTemplater>
+  {
+    ({ slug, title }) => (
+      <a
+        class:list={[
+          'group px-6 py-3 outline-none',
+          '[&:is(:hover,:focus)]:(text-gray-50 bg-blue-600)',
+          'dark:(text-gray-50 [&:is(:hover,:focus)]:(text-gray-900 bg-blue-400))',
+        ]}
+        href={`/${collection}/${slug}`}
+      >
+        <div data-content class="flex items-center justify-between gap-4">
+          <span class="text-2xl font-bold">{title}</span>
+          <div
+            data-wrapper
+            class:list={[
+              'transition-transform duration-200',
+              'group-focus:translate-x-2 group-hover:translate-x-2',
+            ]}
+          >
+            <Icon name="mdi:arrow-right" class="w-6 sm:w-4" />
+          </div>
+        </div>
+      </a>
+    )
+  }
+</PostLinkTemplater>
+
+<TopicSectionTemplater>
+  {
+    ({ title, collection }) => (
+      <Section {title}>
+        <Container>
+          <div
+            data-element="post-links-grid"
+            class="text-blue-600 pt-2 pb-6 border-b-4 border-current"
+          >
+            {executeIfElse({
+              condition: !collection || collection.length === 0,
+
+              ifCb: () => <Center>No content related to {title} here.</Center>,
+
+              elseCb: () => (
+                <div data-content class="grid sm:grid-cols-2">
+                  {collection?.map((entryData) => (
+                    <PostLinkProjector {...entryData} />
+                  ))}
+                </div>
+              ),
+            })}
+          </div>
+        </Container>
+      </Section>
+    )
+  }
+</TopicSectionTemplater>

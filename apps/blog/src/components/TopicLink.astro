@@ -1,0 +1,36 @@
+---
+import { tailwindOrWindiCN_EFS } from '@code-fixer-23/cn-efs';
+import Icon from 'astro-icon';
+
+type Props = {
+  topic: string;
+  class?: string;
+};
+
+const { topic, class: $class } = Astro.props;
+
+const sortedClasses = tailwindOrWindiCN_EFS(
+  'text-blue-600 dark:text-blue-400',
+  'shadow-md shadow-gray-200 dark:shadow-gray-700',
+  '[&:is(:hover,:focus)]:(text-gray-50 bg-blue-600)',
+  'dark:[&:is(:hover,:focus)]:(text-gray-900 bg-blue-400)',
+  $class,
+);
+---
+
+<a
+  href={`/topic/${topic}`}
+  class:list={[
+    sortedClasses,
+    'transition-colors duration-200 ease-in',
+    'outline-none rounded-xl',
+    'px-9 py-3',
+    'border-2 border-transparent border-solid',
+    'border-l-8 border-l-current',
+  ]}
+>
+  <div data-content class="flex justify-between items-center">
+    <span class="capitalize text-sm">{topic}</span>
+    <Icon name="ic:twotone-keyboard-double-arrow-right" class="w-6" />
+  </div>
+</a>

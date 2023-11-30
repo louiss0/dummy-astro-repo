@@ -1,0 +1,112 @@
+---
+import { useTemplaterAndProjector } from '@forastro/utilities';
+import { LocaleTime } from '@personal-projects/internal';
+import Icon from 'astro-icon';
+import { Image } from 'astro:assets';
+import type { CollectionKey, ImageFunction, z } from 'astro:content';
+import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension } from '../utils';
+import BaseButton from './BaseButton.vue';
+import type { Post } from '../collections';
+
+type Props = {
+  type?: 'long' | 'short';
+  collection: CollectionKey;
+  slug: string;
+  imageSrc: z.infer<ReturnType<ImageFunction>>;
+} & Pick<Post, 'title' | 'description' | 'pubDate' | 'updateDate'>;
+
+const {
+  type,
+  description,
+  pubDate,
+  updateDate,
+  title,
+  imageSrc,
+  collection,
+  slug,
+} = Astro.props;
+
+const [ShortCardTemplater, ShortCardProjector] = useTemplaterAndProjector();
+
+const [LongCardTemplater, LongCardProjector] = useTemplaterAndProjector();
+
+const imageAlt =
+  attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension(
+    imageSrc.src,
+  );
+---
+
+<LongCardTemplater>
+  <article
+    transition:name={`${collection}-${slug}`}
+    class="rounded ring-1 flex flex-col"
+  >
+    <header>
+      <Image
+        src={imageSrc}
+        alt={imageAlt}
+        class="object-cover w-full brightness-90 dark:brightness-120"
+      />
+    </header>
+    <div class="px-3 py-1">
+      <BaseButton class="block outline-6 p-0" href={`/${collection}/${slug}`}>
+        <div class="font-bold text-xl px-2 py-2">{title}</div>
+      </BaseButton>
+      <p class="text-lg px-6 py-2">{description}</p>
+    </div>
+
+    <footer class="text-sm px-8 py-4 flex justify-between">
+      <div class="flex items-center gap-2">
+        <Icon name="mdi:calendar-month" class="w-6" />
+        {pubDate && <LocaleTime dateString={pubDate} />}
+      </div>
+
+      {
+        updateDate && (
+          <div class="flex items-center gap-2">
+            <Icon name="mdi:calendar-month" class="w-6" />
+            <LocaleTime dateString={updateDate} />
+          </div>
+        )
+      }
+    </footer>
+  </article>
+</LongCardTemplater>
+
+<ShortCardTemplater>
+  <article
+    transition:name={`${collection}-${slug}`}
+    class="rounded-md ring-1 overflow-hidden grid grid-rows-2 sm:flex sm:h-32"
+  >
+    <header class="flex flex-1">
+      <Image src={imageSrc} alt={imageAlt} class="object-fill" />
+    </header>
+
+    <footer class="text-sm sm:(basis-3/5 flex flex-col)">
+      <div data-element="title" class="px-2 py-2 font-bold text-lg sm:flex-1">
+        <BaseButton class="block outline-6" href={`/${collection}/${slug}`}>
+          {title}
+        </BaseButton>
+      </div>
+      <div data-element="dates-display" class="px-8 py-4">
+        <div data-content class="flex justify-between">
+          <div class="flex gap-2">
+            <Icon name="mdi:calendar-month" class="w-6" />
+            {pubDate && <LocaleTime dateString={pubDate} />}
+          </div>
+
+          {
+            updateDate && (
+              <div class="flex gap-2">
+                <Icon name="mdi:calendar-month" class="w-6" />
+                <LocaleTime dateString={updateDate} />
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </footer>
+  </article>
+</ShortCardTemplater>
+
+{type === 'short' ? <ShortCardProjector /> : <LongCardProjector />}

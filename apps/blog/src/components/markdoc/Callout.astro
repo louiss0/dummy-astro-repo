@@ -1,0 +1,63 @@
+---
+import Icon from 'astro-icon';
+import { Enum, type InferValue } from 'better-enums';
+
+const SEVERITIES = Enum(['info', 'tip', 'warning', 'danger']);
+
+type Severity = InferValue<typeof SEVERITIES>;
+
+const serverityToClassesObject = Object.freeze({
+  info: 'bg-gray-200 text-gray-500 dark:(text-gray-200 bg-gray-500)',
+  tip: 'bg-green-200 text-green-500 dark:(text-green-200 bg-green-500)',
+  warning: 'bg-yellow-200 text-yellow-500 dark:(text-yellow-200 bg-yellow-500)',
+  danger: 'bg-red-200 text-red-500 dark:(text-red-200 bg-red-500)',
+}) satisfies Record<Severity, string>;
+
+const severityToIconNameObject = {
+  tip: 'mdi:rocket-launch',
+  info: 'mdi:information',
+  warning: 'mdi:alert',
+  danger: 'mdi:lightning-bolt-outline',
+} satisfies Record<Severity, string>;
+
+type Props = {
+  type: Severity;
+  title?: string;
+};
+
+const { type, title } = Astro.props;
+
+if (!type) {
+  throw new Error('The type you passed in is empty please pass in a type');
+}
+
+if (!SEVERITIES.values().includes(type)) {
+  throw new Error(`The type must be ${SEVERITIES.values().join(',')} `);
+}
+
+if (!Astro.slots.has('default')) {
+  throw new Error('Please render some content for the callout');
+}
+
+const content = await Astro.slots.render('default');
+
+if (!content) {
+  throw new Error("Please pass in some content for the callout it's empty ");
+}
+---
+
+<div
+  data-element="callout"
+  class="ring-2 ring-current rounded ring-offset-6"
+  class:list={serverityToClassesObject[type]}
+>
+  <div data-element="callout__title" class="px-6 py-3 capitalize">
+    <div data-content class="flex gap-4">
+      <Icon name={severityToIconNameObject[type]} class="w-8" />
+      <span class="text-xl font-semibold">{title ?? type}</span>
+    </div>
+  </div>
+  <div data-element="callout__content" class="px-9 py-3 leading-snug">
+    <Fragment set:html={content} />
+  </div>
+</div>
