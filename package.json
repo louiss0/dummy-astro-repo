@@ -11,7 +11,6 @@
     "@forastro/utilities": "^4.3.2",
     "@iconify/vue": "^4.1.1",
     "@nxtensions/astro": "16.2.0",
-    "@swc/helpers": "~0.5.2",
     "@vueuse/core": "^10.6.1",
     "better-enums": "^0.2.2",
     "tslib": "^2.3.0",
