@@ -1,6 +1,5 @@
 import { component, defineMarkdocConfig } from '@astrojs/markdoc/config';
 import shiki from '@astrojs/markdoc/shiki';
-import { z } from 'astro/zod';
 
 import { markdocHTMLTagSchemas } from 'markdoc-html-tag-schemas';
 
@@ -24,7 +23,7 @@ export default defineMarkdocConfig(
         ],
         nodes: {
             heading: {
-                render: component("./src/components/markdoc/Heading.astro"),
+                render: component("./apps/blog/src/components/markdoc/Heading.astro"),
                 attributes: {
                     level: {
                         ...heading.attributes.level,
@@ -37,39 +36,11 @@ export default defineMarkdocConfig(
         },
         tags: {
             callout: {
-                render: component("./src/components/markdoc/Callout.astro"),
+                render: component("./apps/blog/src/components/markdoc/Callout.astro"),
                 attributes: {
                     title: {
                         type: String,
-                        validate(value) {
 
-                            const titleSchema =
-                                z.string().max(60).min(10)
-                                    .refine((value) => /\s/gm.test(value), { message: "Space your titles and make sure they are more than a word" })
-                            try {
-
-                                titleSchema.parse(value)
-                            } catch (error) {
-
-                                if (error instanceof z.ZodError) {
-
-                                    return [
-                                        {
-                                            id: "invalid-value",
-                                            message: error.message,
-                                            level: "warning",
-
-
-                                        }
-                                    ]
-
-                                }
-
-                            }
-
-                            return []
-
-                        }
                     },
                     type: {
                         type: String,
@@ -80,7 +51,7 @@ export default defineMarkdocConfig(
                 }
             },
             dl: {
-                render: component("./src/components/markdoc/DefinitionList.astro"),
+                render: component("./apps/blog/src/components/markdoc/DefinitionList.astro"),
                 attributes: dl.attributes,
                 children: dl.children,
             },
