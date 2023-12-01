@@ -28,7 +28,7 @@ export const getAllCollections: GetAllCollections =
         (filter?: FilterFunction<AllCollectionNames, U>) =>
         await getCollections(COLLECTION_NAMES, filter)
 
-export const attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension =
+export const attemptToCreateSpacedStringFromLowerCaseAndDashedFileName =
     (fileName: string) => {
 
         const fileNameAndExtensionMatchGroups = fileName.match(/(?<file_name>[\w-]+)(?<extension>\.[a-z]+)/)?.groups

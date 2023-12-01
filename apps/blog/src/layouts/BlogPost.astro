@@ -1,16 +1,9 @@
 ---
-import {
-  Container,
-  Heading,
-  LocaleTime,
-  TwilightFlipSwitch,
-} from '@personal-projects/internal';
 import Copyright from '../components/Copyright.astro';
 import Default from './Default.astro';
 import { useTemplaterAndProjector } from '@forastro/utilities';
 import { Image } from 'astro:assets';
-import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension } from '../utils';
-import BaseButton from '../components/BaseButton.vue';
+import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileName } from '../utils';
 
 interface Props {
   title: string;
@@ -31,14 +24,13 @@ const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
 <Default {...{ title, description }}>
   <header class="px-12 py-6 grid gap-4">
     <nav class="py-4 px-12">
-      <Container maxWidthClass="max-w-screen-lg">
+      <div>
         <div class="flex justify-between items-center">
-          <TwilightFlipSwitch client:idle />
-          <BaseButton href="/">Go Home</BaseButton>
+          <a href="/">Go Home</a>
         </div>
-      </Container>
+      </div>
     </nav>
-    <Container widthClass="w-3/5">
+    <dix class="w-3/5">
       <div class="py-6 px-3 grid gap-9">
         {
           heroImage && (
@@ -46,7 +38,7 @@ const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
               <Image
                 src={heroImage}
                 class="object-cover w-full"
-                alt={attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension(
+                alt={attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
                   heroImage.src,
                 )}
               />
@@ -54,13 +46,13 @@ const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
           )
         }
 
-        <Heading level={1}>{title}</Heading>
+        <h1>{title}</h1>
 
-        {pubDate ? <LocaleTime dateString={pubDate} /> : null}
+        {pubDate ? <time datetime={pubDate} /> : null}
 
         {updateDate ? <UpdatedDateProjector /> : null}
       </div>
-    </Container>
+    </dix>
   </header>
 
   <article

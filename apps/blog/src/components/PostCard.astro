@@ -3,7 +3,7 @@ import { useTemplaterAndProjector } from '@forastro/utilities';
 import Icon from 'astro-icon';
 import { Image } from 'astro:assets';
 import type { CollectionKey, ImageFunction, z } from 'astro:content';
-import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension } from '../utils';
+import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileName } from '../utils';
 import type { Post } from '../collections';
 
 type Props = {
@@ -28,10 +28,9 @@ const [ShortCardTemplater, ShortCardProjector] = useTemplaterAndProjector();
 
 const [LongCardTemplater, LongCardProjector] = useTemplaterAndProjector();
 
-const imageAlt =
-  attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension(
-    imageSrc.src,
-  );
+const imageAlt = attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
+  imageSrc.src,
+);
 ---
 
 <LongCardTemplater>
