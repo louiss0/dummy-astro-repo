@@ -19,6 +19,7 @@
   "devDependencies": {
     "@astrojs/markdoc": "^0.7.2",
     "@astrojs/rss": "^3.0.0",
+    "@astrojs/sitemap": "^3.0.3",
     "@astrojs/vue": "^3.0.4",
     "@fontsource/lato": "^5.0.17",
     "@fontsource/raleway": "^5.0.15",
