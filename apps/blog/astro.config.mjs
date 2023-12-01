@@ -9,11 +9,17 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: "https://sheltonswebdevblog.onrender.com",
+  outDir: "../../dist/astro",
+  vite: {
+    optimizeDeps: {
+      exclude: ["astro:content"]
+    }
+  },
   integrations: [
-    sitemap(),
     markdoc({ ignoreIndentation: true }),
     vue({ jsx: true, }),
     unocss({ injectReset: true }),
+    sitemap(),
 
   ],
 });
