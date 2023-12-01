@@ -3,15 +3,14 @@ import { useTemplaterAndProjector } from '@forastro/utilities';
 import Icon from 'astro-icon';
 import { Image } from 'astro:assets';
 import type { CollectionKey, ImageFunction, z } from 'astro:content';
-import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileName } from '../utils';
-import type { Post } from '../collections';
 
 type Props = {
   type?: 'long' | 'short';
   collection: CollectionKey;
   slug: string;
   imageSrc: z.infer<ReturnType<ImageFunction>>;
-} & Pick<Post, 'title' | 'description' | 'pubDate' | 'updateDate'>;
+  updateDate?: string;
+} & Record<'title' | 'description' | 'pubDate', string>;
 
 const {
   type,
@@ -27,10 +26,6 @@ const {
 const [ShortCardTemplater, ShortCardProjector] = useTemplaterAndProjector();
 
 const [LongCardTemplater, LongCardProjector] = useTemplaterAndProjector();
-
-const imageAlt = attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
-  imageSrc.src,
-);
 ---
 
 <LongCardTemplater>
@@ -41,7 +36,7 @@ const imageAlt = attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
     <header>
       <Image
         src={imageSrc}
-        alt={imageAlt}
+        alt=""
         class="object-cover w-full brightness-90 dark:brightness-120"
       />
     </header>
@@ -76,7 +71,7 @@ const imageAlt = attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
     class="rounded-md ring-1 overflow-hidden grid grid-rows-2 sm:flex sm:h-32"
   >
     <header class="flex flex-1">
-      <Image src={imageSrc} alt={imageAlt} class="object-fill" />
+      <Image src={imageSrc} alt="" class="object-fill" />
     </header>
 
     <footer class="text-sm sm:(basis-3/5 flex flex-col)">

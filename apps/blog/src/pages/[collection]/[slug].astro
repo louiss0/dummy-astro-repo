@@ -2,12 +2,13 @@
 import type { InferGetStaticPropsType } from 'astro';
 import BlogPost from '../../layouts/BlogPost.astro';
 
-import { getAllCollections } from '../../utils';
 import type { InferGetStaticParamsType } from 'astro';
+import { getCollection } from 'astro:content';
 
 export const getStaticPaths = async () =>
   (
-    await getAllCollections(
+    await getCollection(
+      "astro",
       import.meta.env.PROD ? (entry) => !entry.data.draft : undefined,
     )
   ).map((entry) => ({

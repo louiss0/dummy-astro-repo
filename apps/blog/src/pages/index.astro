@@ -1,9 +1,8 @@
 ---
-import { SITE_DESCRIPTION } from '../constants';
 import {executeIfElse} from '@forastro/utilities';
-import PostCard from '../components/PostCard.astro';
 import Default from '../layouts/Default.astro';
 import { getCollection } from 'astro:content';
+import PostCard from '../components/PostCard.astro';
 
 const LatestFivePosts = (
   await getCollection("astro")
@@ -21,7 +20,7 @@ const LatestFivePosts = (
 ---
 
 
-<Default title="Home" description={SITE_DESCRIPTION}>
+<Default title="Home" description={""}>
   <div data-element="posts-layout--xl" class:list={['hidden xl:block']}>
     <div data-content class="grid grid-cols-2 gap-12">
       {executeIfElse({
@@ -44,7 +43,7 @@ const LatestFivePosts = (
                 slug={firstPost.slug}
                 collection={firstPost.collection}
                 description={firstPost.description}
-                pubDate={firstPost.pubDate?? ''} ``
+                pubDate={firstPost.pubDate?? ''} 
                 />
               </div>
 

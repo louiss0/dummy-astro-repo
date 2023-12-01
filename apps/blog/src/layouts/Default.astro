@@ -6,26 +6,11 @@ import '@fontsource/lato/700.css';
 import '@fontsource/lato/900.css';
 import '@fontsource/raleway';
 import BaseHead from '../components/BaseHead.astro';
-import { SITE_TITLE } from '../constants';
-import { z } from 'astro/zod';
 import { ViewTransitions } from 'astro:transitions';
-import type { TitleAndDescription } from '../schemas';
 
-export type Props = TitleAndDescription;
+export type Props = Record<'title' | 'description', string>;
 
 const { title, description } = Astro.props;
-
-const pageTitle = z
-  .string()
-  .refine(
-    (string) => !string.includes(SITE_TITLE),
-    (title) => ({
-      message: `The title that is inserted must not have ${SITE_TITLE} in it. 
-          Please change this ${title}`,
-    }),
-  )
-  .transform((string) => `${SITE_TITLE} | ${string}`)
-  .parse(title);
 ---
 
 <style is:global>
@@ -56,7 +41,7 @@ const pageTitle = z
 
 <html lang="en">
   <head>
-    <BaseHead title={pageTitle} {description} />
+    <BaseHead {title} {description} />
     <ViewTransitions />
     <slot name="head" />
   </head>

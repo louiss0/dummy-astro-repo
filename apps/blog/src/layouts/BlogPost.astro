@@ -3,7 +3,6 @@ import Copyright from '../components/Copyright.astro';
 import Default from './Default.astro';
 import { useTemplaterAndProjector } from '@forastro/utilities';
 import { Image } from 'astro:assets';
-import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileName } from '../utils';
 
 interface Props {
   title: string;
@@ -35,13 +34,7 @@ const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
         {
           heroImage && (
             <div class="flex ring-2 ring-current brightness-90 dark:brightness-120">
-              <Image
-                src={heroImage}
-                class="object-cover w-full"
-                alt={attemptToCreateSpacedStringFromLowerCaseAndDashedFileName(
-                  heroImage.src,
-                )}
-              />
+              <Image src={heroImage} class="object-cover w-full" alt={''} />
             </div>
           )
         }
