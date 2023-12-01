@@ -1,6 +1,6 @@
-import { baseSchema } from "@personal-projects/internal";
 import { z, defineCollection, type SchemaContext } from "astro:content";
 import { Enum, type InferValue } from "better-enums";
+import { baseSchema } from "./schemas";
 
 export const CATEGORIES = Enum(["Segment", "Tutorial", "Standalone"])
 
