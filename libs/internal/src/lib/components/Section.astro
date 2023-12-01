@@ -1,0 +1,65 @@
+---
+import { tailwindOrWindiCN_EFS } from '@code-fixer-23/cn-efs';
+import { executeIf } from '@forastro/utilities';
+import type { HTMLAttributes } from 'astro/types';
+import Heading from 'libs/internal/src/lib/components/Heading.astro';
+
+type Props = FixedSection &
+  (
+    | {
+        label: string;
+        title?: never;
+        titleClass?: never;
+      }
+    | {
+        label?: never;
+        title: string;
+        titleClass?: string;
+      }
+  );
+
+type FixedSection = Omit<
+  HTMLAttributes<'section'>,
+  'aria-labelledby' | 'aria-label' | `on${string}`
+>;
+
+const { title, label, class: $class, titleClass, ...attrs } = Astro.props;
+
+const lowercasedAndDashedTitle = title?.replaceAll(/\s+/g, '-').toLowerCase();
+
+const sortedClasses = tailwindOrWindiCN_EFS(
+  'grid',
+  'gap-16',
+  'px-4',
+  'py-6',
+  $class,
+);
+---
+
+{
+  (() => {
+    if (!(title || label)) {
+      return 'You are use a title or label please.';
+    }
+
+    if (title && label) {
+      return 'You are only supposed to pick between title and label.';
+    }
+
+    return (
+      <section
+        class:list={sortedClasses}
+        aria-label={label ?? null}
+        aria-labelledby={lowercasedAndDashedTitle}
+        {...attrs}
+      >
+        {executeIf(title && !label, () => (
+          <Heading class={titleClass} level={2} id={lowercasedAndDashedTitle}>
+            {title}
+          </Heading>
+        ))}
+        <slot />
+      </section>
+    );
+  })()
+}
