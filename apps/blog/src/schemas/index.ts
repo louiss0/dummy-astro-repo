@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from 'astro/zod'
-import { isSpaced, isAPunctualParagraph } from '../utils'
+import { isSpaced, isAPunctualParagraph } from '../../../../libs/internal/src/utils'
 
 
 

@@ -1,11 +1,9 @@
 ---
 import { useTemplaterAndProjector } from '@forastro/utilities';
-import { LocaleTime } from '@personal-projects/internal';
 import Icon from 'astro-icon';
 import { Image } from 'astro:assets';
 import type { CollectionKey, ImageFunction, z } from 'astro:content';
 import { attemptToCreateSpacedStringFromLowerCaseAndDashedFileNameByCapturingTheFilenameAndExtension } from '../utils';
-import BaseButton from './BaseButton.vue';
 import type { Post } from '../collections';
 
 type Props = {
@@ -49,23 +47,23 @@ const imageAlt =
       />
     </header>
     <div class="px-3 py-1">
-      <BaseButton class="block outline-6 p-0" href={`/${collection}/${slug}`}>
+      <a class="block outline-6 p-0" href={`/${collection}/${slug}`}>
         <div class="font-bold text-xl px-2 py-2">{title}</div>
-      </BaseButton>
+      </a>
       <p class="text-lg px-6 py-2">{description}</p>
     </div>
 
     <footer class="text-sm px-8 py-4 flex justify-between">
       <div class="flex items-center gap-2">
         <Icon name="mdi:calendar-month" class="w-6" />
-        {pubDate && <LocaleTime dateString={pubDate} />}
+        {pubDate && <time datetime={pubDate}>{pubDate}</time>}
       </div>
 
       {
         updateDate && (
           <div class="flex items-center gap-2">
             <Icon name="mdi:calendar-month" class="w-6" />
-            <LocaleTime dateString={updateDate} />
+            <time datetime={updateDate}>{updateDate}</time>
           </div>
         )
       }
@@ -84,22 +82,22 @@ const imageAlt =
 
     <footer class="text-sm sm:(basis-3/5 flex flex-col)">
       <div data-element="title" class="px-2 py-2 font-bold text-lg sm:flex-1">
-        <BaseButton class="block outline-6" href={`/${collection}/${slug}`}>
+        <a class="block outline-6" href={`/${collection}/${slug}`}>
           {title}
-        </BaseButton>
+        </a>
       </div>
       <div data-element="dates-display" class="px-8 py-4">
         <div data-content class="flex justify-between">
           <div class="flex gap-2">
             <Icon name="mdi:calendar-month" class="w-6" />
-            {pubDate && <LocaleTime dateString={pubDate} />}
+            {pubDate && <time datetime={pubDate} />}
           </div>
 
           {
             updateDate && (
               <div class="flex gap-2">
                 <Icon name="mdi:calendar-month" class="w-6" />
-                <LocaleTime dateString={updateDate} />
+                <time datetime={updateDate} />
               </div>
             )
           }

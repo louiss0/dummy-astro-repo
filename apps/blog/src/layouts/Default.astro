@@ -8,8 +8,8 @@ import '@fontsource/raleway';
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_TITLE } from '../constants';
 import { z } from 'astro/zod';
-import type { TitleAndDescription } from '@personal-projects/internal';
 import { ViewTransitions } from 'astro:transitions';
+import type { TitleAndDescription } from '../schemas';
 
 export type Props = TitleAndDescription;
 
