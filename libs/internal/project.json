@@ -1,0 +1,22 @@
+{
+  "name": "internal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/internal/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/internal/**/*.ts"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "scope:shared"
+  ]
+}

@@ -23,7 +23,7 @@ export default defineMarkdocConfig(
         ],
         nodes: {
             heading: {
-                render: component("./apps/blog/src/components/markdoc/Heading.astro"),
+                render: component("./src/components/markdoc/Heading.astro"),
                 attributes: {
                     level: {
                         ...heading.attributes.level,
@@ -36,7 +36,7 @@ export default defineMarkdocConfig(
         },
         tags: {
             callout: {
-                render: component("./apps/blog/src/components/markdoc/Callout.astro"),
+                render: component("./src/components/markdoc/Callout.astro"),
                 attributes: {
                     title: {
                         type: String,
@@ -51,7 +51,7 @@ export default defineMarkdocConfig(
                 }
             },
             dl: {
-                render: component("./apps/blog/src/components/markdoc/DefinitionList.astro"),
+                render: component("./src/components/markdoc/DefinitionList.astro"),
                 attributes: dl.attributes,
                 children: dl.children,
             },

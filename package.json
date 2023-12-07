@@ -13,11 +13,13 @@
     "@nxtensions/astro": "16.2.0",
     "@vueuse/core": "^10.6.1",
     "better-enums": "^0.2.2",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "vue": "^3.3.10"
   },
   "devDependencies": {
     "@astrojs/markdoc": "^0.7.2",
     "@astrojs/rss": "^3.0.0",
+    "@astrojs/vue": "^4.0.2",
     "@fontsource/lato": "^5.0.17",
     "@fontsource/raleway": "^5.0.15",
     "@nx/devkit": "^17.1.3",

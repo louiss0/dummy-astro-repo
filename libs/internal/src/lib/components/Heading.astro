@@ -1,0 +1,90 @@
+---
+import { tailwindOrWindiCN_EFS } from '@code-fixer-23/cn-efs';
+import type { HTMLAttributes } from 'astro/types';
+
+type AcceptableLevels = 1 | 2 | 3 | 4;
+
+type Props<T extends AcceptableLevels> = {
+  level: T;
+} & HTMLAttributes<`h${T}`>;
+
+const {
+  slots,
+  props: { level, id, class: $class, ...attrs },
+} = Astro;
+
+const renderDefaultSlotIFItExistsElseRenderRemiderToInsertIt = slots.has(
+  'default',
+)
+  ? await slots.render('default')
+  : 'A word must be put in between these tags';
+
+const sortedClasses = tailwindOrWindiCN_EFS(
+  'capitalize',
+  '[font-family:--heading-font]',
+  'font-bold',
+  'text-center',
+  $class,
+);
+---
+
+{
+  (() => {
+    const levelToHeadingMap = new Map([
+      [
+        1,
+        <h1
+          id={id?.toLowerCase().replace(/\s+/g, '-')}
+          class="text-[length:--step-5]"
+          class:list={sortedClasses}
+          {...attrs}
+        >
+          <Fragment
+            set:html={renderDefaultSlotIFItExistsElseRenderRemiderToInsertIt}
+          />
+        </h1>,
+      ],
+      [
+        2,
+        <h2
+          id={id?.toLowerCase().replace(/\s+/g, '-')}
+          class="text-[length:--step-4]"
+          class:list={sortedClasses}
+          {...attrs}
+        >
+          <Fragment
+            set:html={renderDefaultSlotIFItExistsElseRenderRemiderToInsertIt}
+          />
+        </h2>,
+      ],
+      [
+        3,
+        <h3
+          id={id?.toLowerCase().replace(/\s+/g, '-')}
+          class="text-[length:--step-3]"
+          class:list={sortedClasses}
+          {...attrs}
+        >
+          <Fragment
+            set:html={renderDefaultSlotIFItExistsElseRenderRemiderToInsertIt}
+          />
+        </h3>,
+      ],
+      [
+        4,
+        <h4
+          id={id?.toLowerCase().replace(/\s+/g, '-')}
+          class="text-[length:--step-2]"
+          class:list={sortedClasses}
+          {...attrs}
+        >
+          <Fragment
+            set:html={renderDefaultSlotIFItExistsElseRenderRemiderToInsertIt}
+          />
+        </h4>,
+      ],
+    ]);
+
+    return levelToHeadingMap.get(level) ?? 'You must pass a level of 1-4';
+  })()
+}

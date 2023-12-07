@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config';
 import unocss from '@unocss/astro';
 import markdoc from '@astrojs/markdoc';
-// import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import vue from '@astrojs/vue';
 // TODO: Use this url for the final build.  'https://sheltonswebdevelopmentblog.info',
 
 // https://astro.build/config
 export default defineConfig({
-  outDir: "../../dist/astro",
   vite: {
     optimizeDeps: {
       exclude: ["astro:content"]
@@ -14,6 +13,9 @@ export default defineConfig({
   },
   integrations: [
     markdoc({ ignoreIndentation: true }),
+    vue({
+      jsx:true
+    }),
     unocss({ injectReset: true }),
   ],
 });

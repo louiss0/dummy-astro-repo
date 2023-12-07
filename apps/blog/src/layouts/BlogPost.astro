@@ -3,6 +3,7 @@ import Copyright from '../components/Copyright.astro';
 import Default from './Default.astro';
 import { useTemplaterAndProjector } from '@forastro/utilities';
 import { Image } from 'astro:assets';
+import { TwilightFlipSwitch } from '@personal-projects/internal';
 
 interface Props {
   title: string;
@@ -25,6 +26,8 @@ const [UpdatedDateTemplater, UpdatedDateProjector] = useTemplaterAndProjector();
     <nav class="py-4 px-12">
       <div>
         <div class="flex justify-between items-center">
+          <TwilightFlipSwitch client:idle />
+
           <a href="/">Go Home</a>
         </div>
       </div>

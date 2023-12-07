@@ -3,7 +3,7 @@ import {executeIfElse} from '@forastro/utilities';
 import Default from '../layouts/Default.astro';
 import { getCollection } from 'astro:content';
 import PostCard from '../components/PostCard.astro';
-
+import { TwilightFlipSwitch } from '@personal-projects/internal';
 const LatestFivePosts = (
   await getCollection("astro")
 )
@@ -21,6 +21,7 @@ const LatestFivePosts = (
 
 
 <Default title="Home" description={""}>
+  <TwilightFlipSwitch client:idle />
   <div data-element="posts-layout--xl" class:list={['hidden xl:block']}>
     <div data-content class="grid grid-cols-2 gap-12">
       {executeIfElse({

@@ -1,0 +1,17 @@
+---
+import { Heading as InternalHeading } from '@personal-projects/internal';
+import type { HTMLAttributes } from 'astro/types';
+type AcceptableLevels = 1 | 2 | 3 | 4;
+
+type Props<T extends AcceptableLevels> = {
+  level: T;
+} & HTMLAttributes<`h${T}`>;
+
+const {
+  props: { level, id, ...attrs },
+} = Astro;
+---
+
+<InternalHeading {level} {id} class="text-left" {...attrs}>
+  <slot />
+</InternalHeading>
